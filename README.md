@@ -13,14 +13,19 @@ Este projeto consiste numa aplicação de back-end desenvolvida em **TLPP** (Top
 
 ## 🗄️ Estrutura da Base de Dados
 
-### 1. Contas (`FIN_CONTAS`)
-| Campo | Tipo | Descrição |
-| :--- | :--- | :--- |
-| `ID_CONTA` | Integer | PK - Identificador único |
-| `DESCRICAO`| Varchar | Ex: "Conta Corrente", "Investimentos" |
-| `TIPO`     | Varchar | (Corrente, Poupança, Crédito, Investimento) |
-| `SALDO_INI`| Numeric | Saldo inicial no momento da abertura |
-| `ATIVO`    | Boolean | Status de uso da conta |
+### 1. Contas (`ZF1`)
+
+| Campo         | Tipo     | Descrição                                   |
+| :------------ | :------  | :-------------------------------------------|
+| `ZF1_FILIAL`  | Caracter | Filial                                      |
+| `ZF1_IDCONT`  | Caracter | Identificador único                         |
+| `ZF1_DESC`    | Caracter | Ex: "Banco do Brasil", "Santander"          |
+| `ZF1_TIPO`    | Caracter | (Corrente, Poupança, Crédito, Investimento) |
+| `ZF1_SLDINI`  | Numeric  | Saldo inicial no momento da abertura        |
+| `ZF1_LIMITE`  | Numeric  | Limite da conta                             |
+| `ZF1_DTABER`  | Data     | Data de abertura da conta                   |
+| `ZF1_MSBLQL`  | Caracter | Status de uso da conta                      |
+| `ZF1_DTFECH`  | Data     | Data de fechamento da conta                 |
 
 ### 2. Categorias (`FIN_CATEGORIAS`)
 | Campo | Tipo | Descrição |
@@ -28,7 +33,7 @@ Este projeto consiste numa aplicação de back-end desenvolvida em **TLPP** (Top
 | `ID_CAT`   | Integer | PK - Identificador único |
 | `NOME`     | Varchar | Ex: "Alimentação", "Transporte" |
 | `TIPO_CAT` | Char(1) | (R = Receita, D = Despesa) |
-| `ID_PAI`   | Integer | FK - Relacionamento para Subcategoria |
+| `ID_PAI`   | Integer | Analisar para uso de análitico e sintético |
 
 ### 3. Movimentações (`FIN_MOVIMENTOS`)
 | Campo | Tipo | Descrição |
