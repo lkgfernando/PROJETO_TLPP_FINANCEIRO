@@ -1,0 +1,91 @@
+#Include "tlpp-core.th"
+#Include "FWMVCDef.ch"
+
+
+Namespace custom.zf1
+
+
+Static cTitulo      := "Cadastro de Contas"
+Static cAliasMVC    := "ZF1"
+
+
+/*/{Protheus.doc} zf1Contas
+(long_description)
+@type user function
+@author Fernando Rodrigues
+@since 20/04/2026
+@version 1.0
+/*/
+User Function zf1Contas()
+    Local aArea      := fwGetArea()  As Array
+    Local oBrowse       
+    Private aRotina  := {}           As Array
+
+    SetFunName("zf1Contas")
+
+    aRotina := custom.zf1.U_MenuDef()
+
+    oBrowse := fwMBrowse():New()
+    oBrowse:SetAlias(cAliasMVC)
+    oBrowse:SetDescription(cTitulo)
+    oBrowse:DisableDetails()
+
+    oBrowse:AddLegend("ZF1->ZF1_TIPO == '1'", "BLUE"  , "Conta Corrente"   )
+    oBrowse:AddLegend("ZF1->ZF1_TIPO == '2'", "GREEN" , "Conta Poupança"   )
+    oBrowse:AddLegend("ZF1->ZF1_TIPO == '3'", "YELLOW", "Investimentos"    )
+    oBrowse:AddLegend("ZF1->ZF1_TIPO == '4'", "RED"   , "Cartão de Crédito")
+
+    oBrowse:Activate()
+
+    fwRestArea(aArea)
+
+Return Nil
+
+
+/*/{Protheus.doc} MenuDef
+(long_description)
+@type user function
+@author Fernando Rodrigues
+@since 20/04/2026
+/*/
+User Function MenuDef()
+    Local aRotina  := {}           As Array
+
+    ADD OPTION aRotina TITLE "Visualizar"  ACTION "ViewDef.custom.zf1.zf1Contas"  OPERATION 1 ACCESS 0
+    ADD OPTION aRotina TITLE "Incluir"     ACTION "ViewDef.custom.zf1.zf1Contas"  OPERATION 3 ACCESS 0
+    ADD OPTION aRotina TITLE "Alterar"     ACTION "ViewDef.custom.zf1.zf1Contas"  OPERATION 4 ACCESS 0
+    ADD OPTION aRotina TITLE "Excluir"     ACTION "ViewDef.custom.zf1.zf1Contas"  OPERATION 5 ACCESS 0
+    ADD OPTION aRotina TITLE "Copiar"      ACTION "ViewDef.custom.zf1.zf1Contas"  OPERATION 9 ACCESS 0
+
+Return aRotina
+
+
+User Function ModelDef()
+    Local oStruct := fwFormStruct(1, cAliasMVC)
+    Local oModel
+    Local bPre    := Nil
+    Local bPos    := Nil
+    Local bCancel := Nil
+
+    oModel := MPFormModel():New("zf1ContasModel", bPre, bPos, /*bCommit*/ ,bCancel)
+    oModel:AddFields("ZF1MASTER", /*cOwner*/, oStruct)
+    oModel:SetDescription("Modelo de Dados - " + cTitulo)
+    oModel:GetModel("ZF1MASTER"):SetDescription("Dados de - " + cTitulo)
+    oModel:SetPrimaryKey({})
+
+
+Return oModel
+
+
+User Function ViewDef()
+    Local oModel := fwLoadModel("custom.zf1.zf1ContasModel")
+    Local oStruct := fwFormStruct(2, cAliasMVC)
+    Local oView
+
+    oView := fwFormView():New()
+    oView:SetModel(oModel)
+    oView:AddField("VIEW_ZF1", oStruct, "ZF1MASTER")
+    oView:CreateHorizontalBox("TELA", 100)
+    oView:SetOwnerView("VIEW_ZF1", "TELA")
+
+Return oView
